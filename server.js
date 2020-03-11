@@ -9,5 +9,6 @@ const server = http.createServer(function(request, response) {
     response.end(text);
 });
 
-server.listen(3000);
+
+server.listen(process.env.PORT || 3000);
 console.log('Server started!');
