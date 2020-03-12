@@ -15,8 +15,8 @@ const server = http.createServer(function(request, response) {
     else
     {
         // const text1 = fs.readFileSync('index1.html', 'utf8');
-        response.end(DATABASE_URL);
-        // response.end(request.url.slice(1, request.url.length));
+        // response.end(DATABASE_URL);
+        response.end(request.url.slice(1, request.url.length));
     }
 });
 
