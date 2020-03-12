@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/lebedev-nikita/MessengerServer/issues"
   },
-  "homepage": "https://github.com/lebedev-nikita/MessengerServer#readme"
+  "homepage": "https://github.com/lebedev-nikita/MessengerServer#readme",
+  "dependencies": {}
 }
