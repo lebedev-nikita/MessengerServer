@@ -7,8 +7,13 @@ const server = http.createServer(function(request, response) {
     console.log('Hello!');
     if(request.url == '/')
     {
-        const text = fs.readFileSync('index.html', 'utf8');    
+        const text = fs.readFileSync('index.html', 'utf8');
         response.end(text);
+    }
+    else
+    {
+        const text1 = fs.readFileSync('index1.html', 'utf8');
+        response.end(text1);
     }
 });
 
