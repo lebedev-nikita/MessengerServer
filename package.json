@@ -17,5 +17,7 @@
     "url": "https://github.com/lebedev-nikita/MessengerServer/issues"
   },
   "homepage": "https://github.com/lebedev-nikita/MessengerServer#readme",
-  "dependencies": {}
+  "dependencies": {
+    "body-parser": "^1.19.0"
+  }
 }
