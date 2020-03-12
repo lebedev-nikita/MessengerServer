@@ -4,16 +4,19 @@ const http = require('http');
 const fs = require('fs');
 
 const server = http.createServer(function(request, response) {
-    console.log('Hello!');
-    if(request.url == '/')
+
+    console.log(request.method, request.url);
+
+    if(request.url === '/')
     {
         const text = fs.readFileSync('index.html', 'utf8');
         response.end(text);
     }
     else
     {
-        const text1 = fs.readFileSync('index1.html', 'utf8');
-        response.end(text1);
+        // const text1 = fs.readFileSync('index1.html', 'utf8');
+        response.end(DATABASE_URL);
+        response.end(request.url.slice(1, request.url.length));
     }
 });
 
