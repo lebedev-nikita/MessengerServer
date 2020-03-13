@@ -1,6 +1,6 @@
 
 **Добавить канал**
-curl -X POST -H "Content-Type: application/json" -d '{"name": "Первый канал"}' http://localhost:8000/channels
+curl -X POST -H "Content-Type: application/json" -d '{"name": "Первый канал"}' http://my-messenger-server.herokuapp.com//channels
 curl -X POST -H "Content-Type: application/json" -d '{"name": "Второй канал"}' http://localhost:8000/channels
 
 **Найти каналы, в имени которых есть "ерв"**
