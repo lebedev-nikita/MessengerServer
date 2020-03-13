@@ -2,32 +2,32 @@ class ChannelManager {
     constructor () {
         // Задаем поля класса в его конструкторе.
 
-        // Словарь чат-комнат - позволяет получить чат-комнату по ее id.
+        // Словарь каналов - позволяет получить канал по ее id.
         this.channels = {};
-        // Счетчик, который хранит id, который бдет присвоен следующей комнате
+        // Счетчик, который хранит id, который бдет присвоен следующему каналу
         this._nextChannelId = 0;
     }
 
     createChannel (name) {
-        // Создаем объект новой комнаты
+        // Создаем объект нового канала
         let channel = new Channel(this._nextChannelId++, name);
         // Заносим его в словарь
         this.channels[channel.id] = channel;
         return channel;
     }
 
-    // Регистронезависимый поиск по имени комнаты
+    // Регистронезависимый поиск по имени канала
     findByName (searchSubstring) {
         // Переведем поисковый запрос в нижний регистр
         let lowerSearchSubstring = searchSubstring.toLowerCase();
 
-        // Получим массив комнат. Для этого, получим все ключи словаря в виде
+        // Получим массив каналов. Для этого, получим все ключи словаря в виде
         // массива, и для каждого ключа вытащим соответствующий ему элемент
         // Если вы используете Node 7.2 или выше, то можно сделать так:
         // let channels = Object.values(this.channels);
         let channels = Object.keys(this.channels).map(id => this.channels[id]);
 
-        // Отфильтруем из массива только те комнаты, в названии которых есть
+        // Отфильтруем из массива только те каналы, в названии которых есть
         // заданная подстрока
         return channels.filter(channel =>
             channel.name.toLowerCase().indexOf(lowerSearchSubstring) !== -1
@@ -52,10 +52,10 @@ class Channel {
         this._nextMessageId = 0;
     }
 
-    postMessage (body, username) {
+    postMessage (text, username) {
         // Создадим новый объект сообщения и поместим его в массив
         // Дату намеренно не передаем - см. конструктор Message
-        let message = new Message(this._nextMessageId++, body, username);
+        let message = new Message(this._nextMessageId++, text, username);
         this.messages.push(message);
         return message;
     }
@@ -71,9 +71,9 @@ class Channel {
 
 
 class Message {
-    constructor (id, body, username, datetime) {
+    constructor (id, text, username, datetime) {
         this.id = id;
-        this.body = body;
+        this.text = text;
         this.username = username;
         // Если дата не задана явно, то используются текущие дата и время сервера
         // new Date() без аргументов примет значение текущих даты/времени
@@ -83,7 +83,7 @@ class Message {
     toJson () {
         return {
             id: this.id,
-            body: this.body,
+            text: this.text,
             username: this.username,
             // Объект даты сериализуем в строку
             datetime: this.datetime.toUTCString()

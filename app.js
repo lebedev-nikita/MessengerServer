@@ -44,13 +44,18 @@ class Application {
         app.post('/channels/:channelId/messages', jsonParser, this.postMessageHandler.bind(this));
     }
 
-    // Обработчик создания комнаты
+    // Обработчик создания канала
     createChannelHandler (req, res) {
         // Если нет обязательного поля name в JSON-теле - вернем 400 Bad Request
+        console.log("req");
+        console.log(req);
+        // console.log("res");
+        // console.log(res);
+
         if (!req.body.name) {
             res.status(400).json({});
         } else {
-            // Создаем комнату в manager'e и вернем ее в виде JSON
+            // Создаем канал в manager'e и вернем его в виде JSON
             let channel = this.manager.createChannel(req.body.name);
             let response = {
                 channel: channel.toJson()
@@ -62,10 +67,10 @@ class Application {
     }
 
     getMessagesHandler (req, res) {
-        // Получаем комнату по ID. Если комнаты нет - вернется undefined
+        // Получаем канал по ID. Если канала нет - вернется undefined
         let channel = this.manager.getById(req.params.channelId);
 
-        // Проверка на то, нашлась ли такая комната
+        // Проверка на то, нашелся ли такой канал
         if (!channel) {
             // Если нет - 404 Not Found и до свидания
             res.status(404).json({});
@@ -82,7 +87,7 @@ class Application {
     }
 
     postMessageHandler (req, res) {
-        // Получаем комнату по ID
+        // Получаем канал по ID
         let channel = this.manager.getById(req.params.channelId);
 
         if (!channel) {
@@ -104,9 +109,9 @@ class Application {
     channelSearchHandler (req, res) {
         // Получаем строку-фильтр из query-параметра searchString.
         // Если параметр не задан, то используем пустую строку, т. е.
-        // будут найдены все комнаты
+        // будут найдены все каналы
         let searchString = req.query.searchString || '';
-        // Ищем комнаты и представляем их в виде JSON
+        // Ищем каналы и представляем их в виде JSON
         let channels = this.manager.findByName(searchString);
         let channelsJson = channels.map(channel => channel.toJson());
         let response = {
