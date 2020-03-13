@@ -1,6 +1,6 @@
 http://my-messenger-server.herokuapp.com/
 
-##API
+## API
 
 **Добавить канал**
 
