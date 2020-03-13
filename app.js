@@ -13,8 +13,8 @@ class Application {
     constructor () {
         // Создаем наше Express-приложение.
         this.expressApp = express();
-        // Создаем ChatRoomManager, экспортированный из models.js
-        this.manager = new models.ChatRoomManager();
+        // Создаем ChannelManager, экспортированный из models.js
+        this.manager = new models.ChannelManager();
         this.attachRoutes();
     }
 
@@ -36,24 +36,24 @@ class Application {
         // функция. Так следует делать всегда при передаче метода как аргумента.
         // Каждый обработчик принимает два аргумента - объекты запроса и ответа,
         // обозначаемые как req и res.
-        app.get('/rooms', this.roomSearchHandler.bind(this));
-        app.post('/rooms', jsonParser, this.createRoomHandler.bind(this));
+        app.get('/channels', this.channelSearchHandler.bind(this));
+        app.post('/channels', jsonParser, this.createChannelHandler.bind(this));
         // Имя после двоеточия - параметр, принимающий произвольное значение.
         // Такие параметры доступны в req.params
-        app.get('/rooms/:roomId/messages', this.getMessagesHandler.bind(this));
-        app.post('/rooms/:roomId/messages', jsonParser, this.postMessageHandler.bind(this));
+        app.get('/channels/:channelId/messages', this.getMessagesHandler.bind(this));
+        app.post('/channels/:channelId/messages', jsonParser, this.postMessageHandler.bind(this));
     }
 
     // Обработчик создания комнаты
-    createRoomHandler (req, res) {
+    createChannelHandler (req, res) {
         // Если нет обязательного поля name в JSON-теле - вернем 400 Bad Request
         if (!req.body.name) {
             res.status(400).json({});
         } else {
             // Создаем комнату в manager'e и вернем ее в виде JSON
-            let room = this.manager.createRoom(req.body.name);
+            let channel = this.manager.createChannel(req.body.name);
             let response = {
-                room: room.toJson()
+                channel: channel.toJson()
             };
             // Отправим ответ клиенту. Объект будет автоматически сериализован
             // в строку. Если явно не задано иного, HTTP-статус будет 200 OK.
@@ -63,15 +63,15 @@ class Application {
 
     getMessagesHandler (req, res) {
         // Получаем комнату по ID. Если комнаты нет - вернется undefined
-        let room = this.manager.getById(req.params.roomId);
+        let channel = this.manager.getById(req.params.channelId);
 
         // Проверка на то, нашлась ли такая комната
-        if (!room) {
+        if (!channel) {
             // Если нет - 404 Not Found и до свидания
             res.status(404).json({});
         } else {
             // Преобразуем все сообщения в JSON
-            let messagesJson = room.messages.map(message => message.toJson());
+            let messagesJson = channel.messages.map(message => message.toJson());
             let response = {
                 messages: messagesJson
             };
@@ -83,16 +83,16 @@ class Application {
 
     postMessageHandler (req, res) {
         // Получаем комнату по ID
-        let room = this.manager.getById(req.params.roomId);
+        let channel = this.manager.getById(req.params.channelId);
 
-        if (!room) {
+        if (!channel) {
             res.status(404).json({});
         } else if (!req.body.body || !req.body.username) {
             // Если формат JSON-сообщения некорректный - вернем 400 Bad Request
             res.status(400).json({});
         } else {
             // Создаем сообщение и возвращаем его клиенту
-            let message = room.postMessage(req.body.body, req.body.username);
+            let message = channel.postMessage(req.body.body, req.body.username);
             let response = {
                 message: message.toJson()
             };
@@ -101,16 +101,16 @@ class Application {
         }
     }
 
-    roomSearchHandler (req, res) {
+    channelSearchHandler (req, res) {
         // Получаем строку-фильтр из query-параметра searchString.
         // Если параметр не задан, то используем пустую строку, т. е.
         // будут найдены все комнаты
         let searchString = req.query.searchString || '';
         // Ищем комнаты и представляем их в виде JSON
-        let rooms = this.manager.findByName(searchString);
-        let roomsJson = rooms.map(room => room.toJson());
+        let channels = this.manager.findByName(searchString);
+        let channelsJson = channels.map(channel => channel.toJson());
         let response = {
-            rooms: roomsJson
+            channels: channelsJson
         };
 
         // Отдаем найденное клиенту

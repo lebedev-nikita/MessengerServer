@@ -1,19 +1,19 @@
-class ChatRoomManager {
+class ChannelManager {
     constructor () {
         // Задаем поля класса в его конструкторе.
 
         // Словарь чат-комнат - позволяет получить чат-комнату по ее id.
-        this.chatRooms = {};
+        this.channels = {};
         // Счетчик, который хранит id, который бдет присвоен следующей комнате
-        this._nextRoomId = 0;
+        this._nextChannelId = 0;
     }
 
-    createRoom (name) {
+    createChannel (name) {
         // Создаем объект новой комнаты
-        let room = new ChatRoom(this._nextRoomId++, name);
+        let channel = new Channel(this._nextChannelId++, name);
         // Заносим его в словарь
-        this.chatRooms[room.id] = room;
-        return room;
+        this.channels[channel.id] = channel;
+        return channel;
     }
 
     // Регистронезависимый поиск по имени комнаты
@@ -24,31 +24,31 @@ class ChatRoomManager {
         // Получим массив комнат. Для этого, получим все ключи словаря в виде
         // массива, и для каждого ключа вытащим соответствующий ему элемент
         // Если вы используете Node 7.2 или выше, то можно сделать так:
-        // let rooms = Object.values(this.chatRooms);
-        let rooms = Object.keys(this.chatRooms).map(id => this.chatRooms[id]);
+        // let channels = Object.values(this.channels);
+        let channels = Object.keys(this.channels).map(id => this.channels[id]);
 
         // Отфильтруем из массива только те комнаты, в названии которых есть
         // заданная подстрока
-        return rooms.filter(room =>
-            room.name.toLowerCase().indexOf(lowerSearchSubstring) !== -1
+        return channels.filter(channel =>
+            channel.name.toLowerCase().indexOf(lowerSearchSubstring) !== -1
         );
     }
 
     // Получаем комнату по ее id
     getById (id) {
-        return this.chatRooms[id];
+        return this.channels[id];
     }
 }
 
 
-class ChatRoom {
+class Channel {
     constructor (id, name) {
         this.id = id;
         // В отличие от чат-комнат, сообщения хранятся в массиве, а не в словаре,
         // так как не стоит задачи получения сообщения по его id
         this.messages = [];
         this.name = name;
-        // По аналогии с ChatRoomManager - счетчик хранит id следующего объекта
+        // По аналогии с ChannelManager - счетчик хранит id следующего объекта
         this._nextMessageId = 0;
     }
 
@@ -93,4 +93,4 @@ class Message {
 
 
 // Определим объекты, которые будут экспортироваться модулем как внешнее API:
-module.exports = { ChatRoomManager, ChatRoom, Message };
+module.exports = { ChannelManager, Channel, Message };
