@@ -7,6 +7,6 @@ let app = new Application();
 // Возьмем express-приложение и запустим HTTP-сервер. Настройки возьмем из
 // конфига приложения. После того, как приложение начнет слушать порт,
 // будет выполнена функция, переданная в качестве аргумента.
-app.expressApp.listen(config.port, config.host, function() {
-    console.log(`App listening at port ${config.port}`);
+app.expressApp.listen(process.env.PORT || config.port, config.host, function() {
+    console.log(`App listening at port ${process.env.PORT || config.port}`);
 });
