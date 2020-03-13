@@ -92,12 +92,12 @@ class Application {
 
         if (!channel) {
             res.status(404).json({});
-        } else if (!req.body.body || !req.body.username) {
+        } else if (!req.body.text || !req.body.username) {
             // Если формат JSON-сообщения некорректный - вернем 400 Bad Request
             res.status(400).json({});
         } else {
             // Создаем сообщение и возвращаем его клиенту
-            let message = channel.postMessage(req.body.body, req.body.username);
+            let message = channel.postMessage(req.body.text, req.body.username);
             let response = {
                 message: message.toJson()
             };
