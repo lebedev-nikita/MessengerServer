@@ -52,10 +52,11 @@ class Channel {
         this._nextMessageId = 0;
     }
 
-    postMessage (text, username) {
+    postMessage (user_id, answer_to_id, text) {
         // Создадим новый объект сообщения и поместим его в массив
         // Дату намеренно не передаем - см. конструктор Message
-        let message = new Message(this._nextMessageId++, text, username);
+        let message = new Message(this._nextMessageId++, this.id, user_id,
+                                  answer_to_id, text);
         this.messages.push(message);
         return message;
     }
@@ -71,22 +72,24 @@ class Channel {
 
 
 class Message {
-    constructor (id, text, username, datetime) {
+    constructor (id, channel_id, user_id, answer_to_id, text) {
         this.id = id;
+        this.channel_id = channel_id;
+        this.user_id = user_id;
+        this.datetime = new Date();
+        this.answer_to_id = answer_to_id;
         this.text = text;
-        this.username = username;
-        // Если дата не задана явно, то используются текущие дата и время сервера
-        // new Date() без аргументов примет значение текущих даты/времени
-        this.datetime = datetime || new Date();
     }
 
     toJson () {
         return {
             id: this.id,
-            text: this.text,
-            username: this.username,
+            channel_id: this.channel_id,
+            user_id: this.user_id,
             // Объект даты сериализуем в строку
-            datetime: this.datetime.toUTCString()
+            datetime: this.datetime.toUTCString(),
+            answer_to_id: this.answer_to_id,
+            text: this.text
         };
     }
 }

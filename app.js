@@ -47,11 +47,6 @@ class Application {
     // Обработчик создания канала
     createChannelHandler (req, res) {
         // Если нет обязательного поля name в JSON-теле - вернем 400 Bad Request
-        console.log("req");
-        console.log(req);
-        // console.log("res");
-        // console.log(res);
-
         if (!req.body.name) {
             res.status(400).json({});
         } else {
@@ -91,13 +86,15 @@ class Application {
         let channel = this.manager.getById(req.params.channelId);
 
         if (!channel) {
-            res.status(404).json({});
-        } else if (!req.body.text || !req.body.username) {
-            // Если формат JSON-сообщения некорректный - вернем 400 Bad Request
-            res.status(400).json({});
+            res.status(404).json({"error:": "Channel not found"});
+        } else if (!req.body.text) {
+            res.status(400).json({"error:":"Message must contain 'text'"});
+        } else if (!req.body.user_id) {
+            res.status(400).json({"error:":"message must contain 'user_id'"});
         } else {
             // Создаем сообщение и возвращаем его клиенту
-            let message = channel.postMessage(req.body.text, req.body.username);
+            let message = channel.postMessage(req.body.user_id, req.body.answer_to_id,
+                                              req.body.text);
             let response = {
                 message: message.toJson()
             };
