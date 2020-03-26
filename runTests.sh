@@ -5,3 +5,9 @@ curl -X POST -H "Content-Type: application/json" -d '{"answer_to_id": 10, "user_
 echo
 echo
 curl http://localhost:8000/channels/0/messages
+echo
+echo
+curl -X DELETE http://localhost:8000/clean
+echo
+echo
+curl http://localhost:8000/channels/0/messages

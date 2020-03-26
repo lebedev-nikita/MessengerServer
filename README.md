@@ -44,3 +44,7 @@ http://my-messenger-server.herokuapp.com/
 В ответ сервер вернет JSON вида:
 
 {"messages": [{"id": 0, "text": "Test message", "username": "test_user", "datetime": "Thu, 19 Mar 2020 20:33:33 GMT"}]}
+
+**Удалить с сервера все каналы и сообщения**
+
+> curl -X DELETE http://my-messenger-server.herokuapp.com/clean

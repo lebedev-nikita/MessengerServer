@@ -34,6 +34,12 @@ class ChannelManager {
         );
     }
 
+    //
+    clean() {
+        this.channels = {};
+        this._nextChannelId = 0;
+    }
+
     // Получаем комнату по ее id
     getById (id) {
         return this.channels[id];

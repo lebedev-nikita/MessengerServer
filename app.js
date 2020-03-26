@@ -38,10 +38,16 @@ class Application {
         // обозначаемые как req и res.
         app.get('/channels', this.channelSearchHandler.bind(this));
         app.post('/channels', jsonParser, this.createChannelHandler.bind(this));
+        app.delete('/clean', jsonParser, this.cleanAllHandler.bind(this));
         // Имя после двоеточия - параметр, принимающий произвольное значение.
         // Такие параметры доступны в req.params
         app.get('/channels/:channelId/messages', this.getMessagesHandler.bind(this));
         app.post('/channels/:channelId/messages', jsonParser, this.postMessageHandler.bind(this));
+    }
+
+    cleanAllHandler(req, res) {
+        this.manager.clean();
+        res.status(200).json({});
     }
 
     // Обработчик создания канала
